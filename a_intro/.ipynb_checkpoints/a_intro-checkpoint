@@ -1,0 +1,1462 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "a34101e7-ac3c-4f68-9fe4-aec61f8ccce4",
+   "metadata": {},
+   "source": [
+    "### Data Analysis\n",
+    "- 원시(원본 그대로) 데이터를 분석하여 인사이트(가시성 증가 및 깊은 이해)로 변환하는 작업이다.\n",
+    "- 문제를 해결하기 위해 데이터를 사용해서 흐름 및 방향을 찾는 기술이다.\n",
+    "- 데이터 분석을 통해 비지니스 프로세스를 구성하고, 의사 결정을 개선하며, 비지니스 성장을 증진할 수 있다.\n",
+    "\n",
+    "<img src=\"./images/architecture.png\" width=\"600px\" style=\"margin-left: 10px;\">\n",
+    "** <sub>ETL은 Extract(추출), Transform(변환), Load(적재)를 의미한다. 여기 저기 흩어진 데이터를 하나로 모으기 위한 결함 과정이다.</sub>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d777439-042e-4ea6-8f2d-9904f039bbf5",
+   "metadata": {},
+   "source": [
+    "### 기초 통계 (Basic statistics)\n",
+    "📌통계는 아직 발생하지 않은 일을 예측하기 위해 사용한다.  \n",
+    "\n",
+    "- 통계학을 공부하는 데 있어 필요한 기본 개념이고,\n",
+    "  수량적인 비교를 기초로 많은 사실을 관찰하고 처리하는 방법을 연구하는 학문이다.\n",
+    "- 불균형 데이터를 대상으로 규칙성과 불규칙성을 발견한 뒤 실생활에 적용할 수 있다.\n",
+    "  \n",
+    "  <img src=\"./images/statistics01.png\" style=\"margin-top: 28px;\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "916acec8-0b31-4c8d-bbae-055cbdf2a020",
+   "metadata": {},
+   "source": [
+    "#### 변량 (Variable)\n",
+    "- 자료의 수치를 변량이라고 하며, 이는 데이터의 값을 의미한다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "c615840e-32c1-44e5-ba94-6e3cc5174e81",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "117 µs ± 7.17 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%%timeit -n 100 -r 10\n",
+    "\n",
+    "# 지역 별 총 100명의 키\n",
+    "import pandas as pd\n",
+    "import random\n",
+    "\n",
+    "df = pd.DataFrame([[random.randrange(151, 190)for _ in range(10)] for _ in range(10)], \\\n",
+    "                              columns=\"서울,경기,인천,광주,대구,부산,전주,강릉,울산,수원\".split(\",\"))\n",
+    "# display(df)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "3541304a-62b9-4925-bd30-f4a759d77e85",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "31 µs ± 3.87 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%%timeit -n 100 -r 10\n",
+    "\n",
+    "# 지역 별 총 100명의 키\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "df = pd.DataFrame(np.random.randint(151, 190, size=(10, 10)), \\\n",
+    "                              columns=\"서울,경기,인천,광주,대구,부산,전주,강릉,울산,수원\".split(\",\"))\n",
+    "# display(df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b37b0939-7524-41ca-9064-9027764d48de",
+   "metadata": {},
+   "source": [
+    "#### 계급 (Class)\n",
+    "- 변량을 일정 간격으로 나눈 구간을 의미한다.\n",
+    "- 변량의 최소값과 최대값을 잘 고려해서 계급을 정해야한다.\n",
+    "- 예를 들어, 150 ~ 160 계급이 있을 경우, 160까지 속한다. 즉, 151 ~ 160까지이다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "3ad9c364-1768-4434-bc3a-99964955c635",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>서울</th>\n",
+       "      <th>계급</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>153</td>\n",
+       "      <td>(150, 160]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>184</td>\n",
+       "      <td>(180, 190]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>156</td>\n",
+       "      <td>(150, 160]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>176</td>\n",
+       "      <td>(170, 180]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>151</td>\n",
+       "      <td>(150, 160]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>154</td>\n",
+       "      <td>(150, 160]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>185</td>\n",
+       "      <td>(180, 190]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>180</td>\n",
+       "      <td>(170, 180]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>152</td>\n",
+       "      <td>(150, 160]</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>180</td>\n",
+       "      <td>(170, 180]</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    서울          계급\n",
+       "0  153  (150, 160]\n",
+       "1  184  (180, 190]\n",
+       "2  156  (150, 160]\n",
+       "3  176  (170, 180]\n",
+       "4  151  (150, 160]\n",
+       "5  154  (150, 160]\n",
+       "6  185  (180, 190]\n",
+       "7  180  (170, 180]\n",
+       "8  152  (150, 160]\n",
+       "9  180  (170, 180]"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_seoul = df['서울']\n",
+    "df_class = pd.cut(df_seoul, bins=[150, 160, 170, 180, 190])\n",
+    "df_seoul_class = pd.DataFrame({'서울': df_seoul, '계급': df_class})\n",
+    "df_seoul_class"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c6a25de4-fd8c-4160-85bc-3060e3e1d77e",
+   "metadata": {},
+   "source": [
+    "#### 도수 (Frequency)\n",
+    "- 각 계급에 속하는 변량의 개수를 의미한다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "38355fb6-8415-4aee-838e-1711ed3241ee",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>서울</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>계급</th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>(150, 160]</th>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(170, 180]</th>\n",
+       "      <td>3</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(180, 190]</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            서울\n",
+       "계급            \n",
+       "(150, 160]   5\n",
+       "(170, 180]   3\n",
+       "(180, 190]   2"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_seoul_class.groupby('계급', observed=True).count()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f6671ed8-d962-422e-93b3-99ec5147d886",
+   "metadata": {},
+   "source": [
+    "#### 상대 도수 (Relative frequency)\n",
+    "- 각 계급에 속하는 변량의 비율을 의미한다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "ad16e231-fa04-4126-9c99-39ff55c7a6fc",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>서울</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>계급</th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>(150, 160]</th>\n",
+       "      <td>0.05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(160, 170]</th>\n",
+       "      <td>0.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(170, 180]</th>\n",
+       "      <td>0.03</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(180, 190]</th>\n",
+       "      <td>0.02</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "              서울\n",
+       "계급              \n",
+       "(150, 160]  0.05\n",
+       "(160, 170]  0.00\n",
+       "(170, 180]  0.03\n",
+       "(180, 190]  0.02"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_seoul_class.groupby('계급', observed=False).count().apply(lambda x: x / 100)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6148bc5b-1fdb-40f1-b9aa-3a75ac2cc689",
+   "metadata": {},
+   "source": [
+    "#### 도수분포표 (Frequency Table)\n",
+    "- 주어진 자료를 계급별로 나눈 뒤 각 계급에 속하는 도수 및 상대 도수를 조사한 것이다.\n",
+    "- 구간별 분포를 한 번에 알아보기 좋지만 계급별 각 변량의 정확한 값이 생략되어 있다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "ee6ca43d-3e19-46ed-bf47-9696fb5a7eec",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>도수</th>\n",
+       "      <th>상대 도수</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>계급</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>(150, 160]</th>\n",
+       "      <td>5</td>\n",
+       "      <td>0.05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(160, 170]</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(170, 180]</th>\n",
+       "      <td>3</td>\n",
+       "      <td>0.03</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>(180, 190]</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0.02</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            도수  상대 도수\n",
+       "계급                   \n",
+       "(150, 160]   5   0.05\n",
+       "(160, 170]   0   0.00\n",
+       "(170, 180]   3   0.03\n",
+       "(180, 190]   2   0.02"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "freq_df = pd.DataFrame({\"도수\": df_seoul_class.groupby('계급', observed=False).count()[\"서울\"], \\\n",
+    "             \"상대 도수\": df_seoul_class.groupby('계급', observed=False).count().apply(lambda x: x / 100)[\"서울\"]})\n",
+    "display(freq_df)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "62e2f14a-0521-493c-a97e-e51a1f978332",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>계급</th>\n",
+       "      <th>도수</th>\n",
+       "      <th>상대 도수</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>(150, 160]</td>\n",
+       "      <td>5</td>\n",
+       "      <td>0.05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>(160, 170]</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>(170, 180]</td>\n",
+       "      <td>3</td>\n",
+       "      <td>0.03</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>(180, 190]</td>\n",
+       "      <td>2</td>\n",
+       "      <td>0.02</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "           계급  도수  상대 도수\n",
+       "0  (150, 160]   5   0.05\n",
+       "1  (160, 170]   0   0.00\n",
+       "2  (170, 180]   3   0.03\n",
+       "3  (180, 190]   2   0.02"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "freq_df.reset_index(drop=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a1d35591-3e7e-4cc8-aaf7-a563807a7a81",
+   "metadata": {},
+   "source": [
+    "#### 히스토그램 (Histogram)\n",
+    "- 도수분포표를 시각화한 그래프이다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "4b99a9a7-e0ea-4ef7-ae5d-67ab957d0330",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<Axes: >"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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WAAAyQgLACAZYQEAJNOnsLj77rvjqKOOiqFDh8bEiRNjxYoVqdcFAFShssPioYceimuuuSZ+/OMfx/PPPx9f+MIXYtq0abFu3bpKrA8AqCJlh8Xtt98el19+eVxxxRVx/PHHxx133BHNzc0xb968SqwPAKgig8s5+cMPP4zVq1fHj370o27Hp06dGs8880zJ6+Tz+cjn812XW1tbIyLi3XffjUKhUPI6hUIh2tvbY/PmzdHQ0NDr9Q3+aFuvz60GgzuyaG/viMGF+tjeUbe/l9MvNm/eXPJ4X/dEramGOfTH43AgPjZKMYcdzKKocw6VeI7YsmVLRERkWbbnNZRzo5s2bYrt27fHEUcc0e34EUccEW+//XbJ69x6660xd+7c3Y4fddRR5XzpAWvG/l5AP2v69f5eAdVioD02emIOO5hFUaXnsGXLljjkkEN6/HxZYdGprq57DWZZttuxTtdff33MmTOn63JHR0e8++67cdhhh/V4nba2tmhubo7169dHY2NjX5ZYE8xhB7MoMocicygyhx3MoqiSc8iyLLZs2RKjR4/e43llhUVTU1MMGjRot1cnNm7cuNurGJ1yuVzkcrluxz7+8Y/36us1NjYO6A3SyRx2MIsicygyhyJz2MEsiio1hz29UtGprF/eHDJkSEycODGWLFnS7fiSJUvi85//fHmrAwBqTtk/CpkzZ05ceumlMWnSpJg8eXLce++9sW7durjqqqsqsT4AoIqUHRYXX3xxbN68OW666abYsGFDjB8/Ph577LEYO3ZsskXlcrn46U9/utuPUAYac9jBLIrMocgcisxhB7MoOhDmUJft7e+NAAD0kvcKAQCSERYAQDLCAgBIRlgAAMn0W1gsX748zj///Bg9enTU1dXFww8/3O3zl112WdTV1XX7OO2007qdk8/nY/bs2dHU1BQHH3xwXHDBBfHGG2/0111IIsUczjrrrN3O+cY3vtGP9yKNvc0iIuKVV16JCy64IA455JAYPnx4nHbaad3eSXcg7ImIvc+hFvbE3uaw6/3r/PjlL3/ZdU4t7IeINLMYCHti69atcfXVV8eYMWPioIMOiuOPP363N8SshT2RYg79uR/6LSy2bdsWEyZMiLvuuqvHc770pS/Fhg0buj4ee+yxbp+/5pprYuHChbFgwYJ4+umnY+vWrXHeeefF9u3bK738ZFLMISLiyiuv7HbOPffcU8llV8TeZvHvf/87Tj/99DjuuONi2bJl8cILL8SNN94YQ4cO7TpnIOyJ3swhovr3xN7msPN927BhQzzwwANRV1cXX/3qV7vOqYX9EJFmFhG1vyeuvfbaWLx4cfzpT3+KV155Ja699tqYPXt2PPLII13n1MKeSDGHiH7cD9l+EBHZwoULux2bOXNmNn369B6v8/7772cNDQ3ZggULuo69+eabWX19fbZ48eIKrbSy+jKHLMuyM888M/ve975XsXXtD6VmcfHFF2ff+ta3erzOQNkTe5tDltXenig1h11Nnz49O/vss7su1+J+yLK+zSLLBsaeGDduXHbTTTd1O3byySdnP/nJT7Isq8090Zc5ZFn/7ocD6ncsli1bFiNHjoxjjz02rrzyyti4cWPX51avXh2FQiGmTp3adWz06NExfvz4Ht+yvVrtaQ6d/vznP0dTU1OMGzcurrvuuq63s60VHR0dsWjRojj22GPj3HPPjZEjR8app57a7SXAgbAnejOHTrW+J3b2zjvvxKJFi+Lyyy/vOjYQ9kMppWbRqdb3xOmnnx6PPvpovPnmm5FlWSxdujRee+21OPfccyNi4OyJvc2hU3/thz69u2klTJs2Lb7+9a/H2LFjY+3atXHjjTfG2WefHatXr45cLhdvv/12DBkyJA499NBu19vTW7ZXo73NISLikksuiaOOOiqOPPLIeOmll+L666+PF154Ybf3cKlmGzdujK1bt8Ztt90WN998c/ziF7+IxYsXx0UXXRRLly6NM888c0Dsid7MIWJg7Imd/fGPf4zhw4fHRRdd1HVsIOyHUkrNImJg7Ik777wzrrzyyhgzZkwMHjw46uvr47777ovTTz89IgbOntjbHCL6dz8cMGFx8cUXd/33+PHjY9KkSTF27NhYtGjRbg+YnWV7eMv2atSbOVx55ZXdzvn0pz8dkyZNiueeey5OPvnkfl9zJXR0dERExPTp0+Paa6+NiIiTTjopnnnmmfjd737X9Q21lFraE72dw0DYEzt74IEH4pJLLtnt90xKqaX9UEpPsxgIe+LOO++MlStXxqOPPhpjx46N5cuXx3e+850YNWpUnHPOOT1er9b2RG/m0J/74YD6UcjORo0aFWPHjo01a9ZERMSRRx4ZH374Ybz33nvdztvTW7bXgl3nUMrJJ58cDQ0Nezyn2jQ1NcXgwYPjhBNO6Hb8+OOP7/rbEANhT/RmDqXU4p7otGLFinj11Vfjiiuu6HZ8IOyHXfU0i1JqbU988MEHccMNN8Ttt98e559/fpx44olx9dVXx8UXXxy/+tWvImJg7InezKGUSu6HAzYsNm/eHOvXr49Ro0ZFRMTEiROjoaGh28s2GzZsiJdeeqmm37J91zmU8vLLL0ehUNjjOdVmyJAhccopp8Srr77a7fhrr73W9YZ3A2FP9GYOpdTinuh0//33x8SJE2PChAndjg+E/bCrnmZRSq3tiUKhEIVCIerru38bGzRoUNcrfQNhT/RmDqVUdD/0y6+IZlm2ZcuW7Pnnn8+ef/75LCKy22+/PXv++eez//73v9mWLVuy73//+9kzzzyTrV27Nlu6dGk2efLk7BOf+ETW1tbWdRtXXXVVNmbMmOzJJ5/Mnnvuuezss8/OJkyYkH300Uf9dTf22b7O4fXXX8/mzp2bPfvss9natWuzRYsWZccdd1z2uc99rqrmkGV7nkWWZdnf/va3rKGhIbv33nuzNWvWZL/97W+zQYMGZStWrOi6jVrfE1m29znUyp7Y2xyyLMtaW1uzYcOGZfPmzSt5G7WwH7Js32cxUPbEmWeemY0bNy5bunRp9p///Cd78MEHs6FDh2Z33313123Uwp7Y1zn0937ot7BYunRpFhG7fcycOTNrb2/Ppk6dmh1++OFZQ0ND9slPfjKbOXNmtm7dum638cEHH2RXX311NmLEiOyggw7KzjvvvN3OOdDt6xzWrVuXnXHGGdmIESOyIUOGZEcffXT23e9+N9u8efN+vFd9s6dZdLr//vuzY445Jhs6dGg2YcKE7OGHH+52G7W+JzrtaQ61sid6M4d77rknO+igg7L333+/5G3Uwn7Isn2fxUDZExs2bMguu+yybPTo0dnQoUOzz3zmM9mvf/3rrKOjo+s2amFP7Osc+ns/eNt0ACCZA/Z3LACA6iMsAIBkhAUAkIywAACSERYAQDLCAgBIRlgAAMkICwAgGWEBACQjLACAZIQFAJCMsAAAkvl/A8Eaem+Zl8sAAAAASUVORK5CYII=",
+      "text/plain": [
+       "<Figure size 640x480 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as ply\n",
+    "import numpy as np\n",
+    "\n",
+    "df_seoul_class[\"서울\"].hist(bins=4)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d8e9c38b-50ad-44ac-8013-f2e25d22cc15",
+   "metadata": {},
+   "source": [
+    "#### 산술 평균 (Mean)\n",
+    "- 변량의 합을 변량의 수로 나눈 값을 의미한다.\n",
+    "\n",
+    "<img src=\"./images/mean.png\" style=\"margin-left: 20px;\">"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "c4425ac3-cc99-4aaf-957e-2fcc4fa8cf1f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>평균 키</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>서울</th>\n",
+       "      <td>167.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>경기</th>\n",
+       "      <td>165.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>인천</th>\n",
+       "      <td>170.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>광주</th>\n",
+       "      <td>158.8</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>대구</th>\n",
+       "      <td>173.3</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>부산</th>\n",
+       "      <td>176.2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>전주</th>\n",
+       "      <td>167.7</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>강릉</th>\n",
+       "      <td>170.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>울산</th>\n",
+       "      <td>171.8</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>수원</th>\n",
+       "      <td>165.9</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     평균 키\n",
+       "서울  167.1\n",
+       "경기  165.9\n",
+       "인천  170.1\n",
+       "광주  158.8\n",
+       "대구  173.3\n",
+       "부산  176.2\n",
+       "전주  167.7\n",
+       "강릉  170.0\n",
+       "울산  171.8\n",
+       "수원  165.9"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.mean(axis=0).to_frame(name='평균 키')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "64b08f58-d1d3-4c81-950a-a4348816687a",
+   "metadata": {},
+   "source": [
+    "#### 편차 (Deviation)\n",
+    "- 변량에서 평균을 뺀 값이다.\n",
+    "- 각 변량의 편차를 구한 뒤 모두 합하면 0이 되기 때문에 편차의 평균은 구할 수 없다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "1ef53b98-48bc-41c9-ac5a-fea85b8b89e3",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>경기</th>\n",
+       "      <th>편차</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>168</td>\n",
+       "      <td>2.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>160</td>\n",
+       "      <td>-5.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>169</td>\n",
+       "      <td>3.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>152</td>\n",
+       "      <td>-13.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>168</td>\n",
+       "      <td>2.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>186</td>\n",
+       "      <td>20.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>156</td>\n",
+       "      <td>-9.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>160</td>\n",
+       "      <td>-5.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>170</td>\n",
+       "      <td>4.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>170</td>\n",
+       "      <td>4.1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    경기    편차\n",
+       "0  168   2.1\n",
+       "1  160  -5.9\n",
+       "2  169   3.1\n",
+       "3  152 -13.9\n",
+       "4  168   2.1\n",
+       "5  186  20.1\n",
+       "6  156  -9.9\n",
+       "7  160  -5.9\n",
+       "8  170   4.1\n",
+       "9  170   4.1"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "-5.684341886080802e-14\n",
+      "편차의 합: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "gyeonggi_df = df['경기'].to_frame()\n",
+    "gyeonggi_df['편차'] = gyeonggi_df[\"경기\"].apply(lambda x: x - gyeonggi_df.mean())\n",
+    "display(gyeonggi_df)\n",
+    "\n",
+    "# e가 붙어있는 수는 엄청 작은 수나 엄청 큰 수를 간략화 해주는 기능\n",
+    "# 이 때 e는 자연 상수가 아니며, 과학적 기수법 e라고 한다.\n",
+    "# (a)e(b) = a * 10^b\n",
+    "\n",
+    "print(gyeonggi_df['편차'].sum())\n",
+    "\n",
+    "# 실수의 오류를 원래 값으로 변경하고자 반올림(round) 사용\n",
+    "total = round(gyeonggi_df['편차'].sum())\n",
+    "print(f'편차의 합: {total}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "19e8b802-217f-4302-8ea2-5910e7065fef",
+   "metadata": {},
+   "source": [
+    "#### 분산 (Variance)\n",
+    "- 변량이 평균으로부터 떨어져있는 정도를 보기 위한 통계량이다.\n",
+    "- 편차에 제곱하여 그 합을 구한 뒤 산술 평균을 낸다.\n",
+    "\n",
+    "<img src=\"./images/variance.png\" style=\"margin-left: 10px;\">"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "cf672111-acfc-468d-b26e-e6215fa9dfcd",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>경기</th>\n",
+       "      <th>편차</th>\n",
+       "      <th>편차의 제곱(분산)</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>168</td>\n",
+       "      <td>2.1</td>\n",
+       "      <td>4.41</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>160</td>\n",
+       "      <td>-5.9</td>\n",
+       "      <td>34.81</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>169</td>\n",
+       "      <td>3.1</td>\n",
+       "      <td>9.61</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>152</td>\n",
+       "      <td>-13.9</td>\n",
+       "      <td>193.21</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>168</td>\n",
+       "      <td>2.1</td>\n",
+       "      <td>4.41</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>186</td>\n",
+       "      <td>20.1</td>\n",
+       "      <td>404.01</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>156</td>\n",
+       "      <td>-9.9</td>\n",
+       "      <td>98.01</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>160</td>\n",
+       "      <td>-5.9</td>\n",
+       "      <td>34.81</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>170</td>\n",
+       "      <td>4.1</td>\n",
+       "      <td>16.81</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>170</td>\n",
+       "      <td>4.1</td>\n",
+       "      <td>16.81</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    경기    편차  편차의 제곱(분산)\n",
+       "0  168   2.1        4.41\n",
+       "1  160  -5.9       34.81\n",
+       "2  169   3.1        9.61\n",
+       "3  152 -13.9      193.21\n",
+       "4  168   2.1        4.41\n",
+       "5  186  20.1      404.01\n",
+       "6  156  -9.9       98.01\n",
+       "7  160  -5.9       34.81\n",
+       "8  170   4.1       16.81\n",
+       "9  170   4.1       16.81"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "분산: 81.69\n"
+     ]
+    }
+   ],
+   "source": [
+    "gyeonggi_df['편차의 제곱(분산)'] = gyeonggi_df['편차'].apply(lambda x: x**2)\n",
+    "\n",
+    "display(gyeonggi_df)\n",
+    "\n",
+    "variance = gyeonggi_df['편차의 제곱(분산)'].mean()\n",
+    "print(f'분산: {round(variance, 2)}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b027f387-dd21-41c4-b564-941bcd8063b9",
+   "metadata": {},
+   "source": [
+    "#### 표준편차 (Standard deviation)\n",
+    "- 분산의 제곱근이며, 관측된 변량의 흩어진 정도를 하나의 수치로 나타내는 통계량이다.\n",
+    "- 표준편차가 작을 수록 평균 값에서 변량들의 거리가 가깝다고 판단한다.\n",
+    "\n",
+    "<img src=\"./images/standard_deviation.png\" style=\"margin-left: 15px;\">"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "7293650d-0101-4d12-ab2f-77a51610b1ea",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "표준편차: 9.038252043398655\n"
+     ]
+    }
+   ],
+   "source": [
+    "import math\n",
+    "\n",
+    "std = math.sqrt(variance)\n",
+    "print(f'표준편차: {std}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d45234e7-5e38-47fe-8db8-3b1f5d05eb32",
+   "metadata": {},
+   "source": [
+    "#### 확률변수 (Random variable)\n",
+    "- 머신러닝, 딥러닝 등 확률을 다루는 분야에 있어서 필수적인 개념이다.\n",
+    "- 확률(probability)이 있다는 뜻은 사건(event)이 있다는 뜻이며, 시행(trial)을 해야 시행의 결과인 사건(event)이 나타난다.\n",
+    "- 시행(trial)을 해서 어떤 사건(event)이 나타났는지에 따라 값이 정해지는 변수이다.\n",
+    "- 알파벳 대문자로 표현하며, X, Y, Z 또는 X<sub>1</sub>, X<sub>2</sub>, X<sub>3</sub>과 같이 표현한다.\n",
+    "- 확률 변수는 집합이며, 원소를 확률변수값(Value of random variable)이라고 표현한다. 확률변수에서 사용한 알파벳의 소문자를 사용한다.\n",
+    "- Y = {y<sub>1</sub>, y<sub>2</sub>, y<sub>3</sub>}, 이 때 Y는 확률변수이고 원소인 y<sub>1</sub> ~ y<sub>3</sub>은 확률변수값이다.\n",
+    "\n",
+    "<img src=\"./images/random_variable.jpg\" width=\"700px\" style=\"margin-left: 15px;\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c9fc8b29-ab08-4aca-b79a-5eeef318d42e",
+   "metadata": {},
+   "source": [
+    "#### 범주형 확률변수 (Categorical random variable)\n",
+    "- 범주형 확률변수값은 수치가 아닌 기호나 언어, 숫자등으로 표현하고, 기호나 언어는 순서를 가질 수도 있다.\n",
+    "- 유한 집합으로 표현한다. 유한집합은 원소의 수가 유한한 집합을 의미한다.\n",
+    "- {앞면, 뒷면}, {동의, 비동의}, {선택, 미선택}, {봄, 여름, 가을, 겨울}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b382f563-b503-4c29-9b5a-971fb938e916",
+   "metadata": {},
+   "source": [
+    "#### 이산형 확률변수 (Discrete random variable)\n",
+    "- 이산형 확률변수값은 수치로 표현하고 셀 수 있는 값이다. 이를 더 넓은 범위로, 양적 확률변수 또는 수치형 확률변수라고도 부른다.\n",
+    "- 유한집합 또는 셀 수 있는 무한집합으로 표현한다. 무한집합은 원소의 수가 무한한 집합을 의미한다.\n",
+    "- {0, 1, 2, 3}, {10, 20, 30}, {1, 2, 3, ...}, {100, 1000, 10000}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e15cf2b2-25ee-421c-8c12-7e0022de82e4",
+   "metadata": {},
+   "source": [
+    "#### 연속형 확률변수 (Continuous random variable))\n",
+    "- 연속형 확률변수는 구간을 나타내는 수치로 표현한다. 이를 더 넎은 범위로, 양적 확률변수 또는 수치형 확률변수라고도 부른다.\n",
+    "- 셀 수 없는 무한집합으로 표현한다.\n",
+    "- 128.56 < X < 268.56"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6c3825ac-9a73-4940-95ca-9e5356f62841",
+   "metadata": {},
+   "source": [
+    "#### 확률분포 (Probability distribution)\n",
+    "- 사건에 대한 확률변수에서 정의된 모든 확률값의 분포이며, 서로 다른 모든 결과의 출현 확률을 제공한다.\n",
+    "  \n",
+    "> <strong>1) 동전 던지기 (시행)</strong>  \n",
+    "> <strong>2) { 0, 1 } (확률변수와 확률변수값)</strong>  \n",
+    "> <strong>3) 완벽한 형태의 동전일 경우 확률 분포</strong>  \n",
+    ">\n",
+    "> <img src=\"./images/probability_distribution01.png\">\n",
+    "  \n",
+    "\n",
+    "> <strong>1) 1 ~ 12까지 새겨진 주사위 던지기 (시행)</strong>  \n",
+    "> <strong>2) { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } (확률변수와 확률변수값)</strong>  \n",
+    "> <strong>3) 완벽한 형태의 주사위일 경우 확률 분포</strong>  \n",
+    ">\n",
+    "> <img src=\"./images/probability_distribution02.png\">"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "626aa6f6-560f-497e-8514-6172c96a24df",
+   "metadata": {},
+   "source": [
+    "#### 확률분포표 (Probability distribution table)\n",
+    "- 확률변수의 모든 값(원소)에 대해 확률을 표로 표시한 것이다.\n",
+    "- 범주형 또는 이산형 확률변수의 확률분포를 표현하기에 적합한 방식이다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "69265856-2e47-4815-bcc0-5dfe739a2a76",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>경주마 번호</th>\n",
+       "      <th>1등 횟수</th>\n",
+       "      <th>1등할 확률</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>25</td>\n",
+       "      <td>0.25</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>25</td>\n",
+       "      <td>0.25</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>25</td>\n",
+       "      <td>0.25</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>25</td>\n",
+       "      <td>0.25</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   경주마 번호  1등 횟수  1등할 확률\n",
+       "0       1     25    0.25\n",
+       "1       2     25    0.25\n",
+       "2       3     25    0.25\n",
+       "3       4     25    0.25"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "\n",
+    "df_h_dist = pd.DataFrame(np.arange(0, 100) % 4 + 1, columns=['경주마 번호'])\n",
+    "\n",
+    "df_h_dist_group = df_h_dist.groupby('경주마 번호')['경주마 번호'].count().reset_index(name='1등 횟수')\n",
+    "\n",
+    "df_h_dist_group['1등할 확률'] = df_h_dist_group['1등 횟수'] / 100\n",
+    "display(df_h_dist_group)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8a23d05b-b6a9-41db-848c-34e6a57b9029",
+   "metadata": {},
+   "source": [
+    "#### 확률분포함수 (Probability distribution function)\n",
+    "- 확률변수의 분포를 나타내는 함수로서, 확률변수의 확률변수값이 나올 확률을 나타내는 함수이다.\n",
+    "- 확률질량함수, 확률밀도함수 등의 함수가 있다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "fb634f4a-26e2-4d04-b9c7-63fde7ad551f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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tm3boqamJiIient7x3wmyq233hqHDx+OBx98MP7u7/4uzj///Lj22mvjH/7hH6bupwAAppWSrAjuswwNDUVVVVUMDg5GZWVloccBAN6B0/n723fxAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQnEkFysaNG6O2tjYqKiqirq4udu3a9Tv3Hx4ejnXr1kVNTU3kcrn40Ic+FJs3b57UwADA9FeW7wFbtmyJ1atXx8aNG2PRokXx7W9/OxYvXhyvvvpqzJs3b8JjbrrppvjlL38ZjzzySHz4wx+O/v7+OH78+GkPDwBMTyVZlmX5HHD11VfHlVdeGe3t7aNr8+fPjxtvvDHa2trG7f/cc8/FzTffHPv3748LLrhgUkMODQ1FVVVVDA4ORmVl5aSeAwB4b53O39953eI5duxYdHZ2RnNz85j15ubm2L1794THPPvss1FfXx9f/epX4wMf+EBceumlceedd8Zvf/vbU77O8PBwDA0NjdkAgDNHXrd4BgYGYmRkJKqrq8esV1dXR19f34TH7N+/P1588cWoqKiIp556KgYGBuL222+PX/3qV6d8H0pbW1vce++9+YwGAEwjk3qTbElJyZjHWZaNW3vLiRMnoqSkJB5//PG46qqr4vrrr48HHnggHn300VNeRVm7dm0MDg6ObgcPHpzMmABAkcrrCsqsWbOitLR03NWS/v7+cVdV3jJ79uz4wAc+EFVVVaNr8+fPjyzL4he/+EVccskl447J5XKRy+XyGQ0AmEbyuoJSXl4edXV10dHRMWa9o6MjGhsbJzxm0aJF8T//8z9x5MiR0bXXXnstZsyYERdffPEkRgYApru8b/G0trbGww8/HJs3b459+/bFmjVroqenJ1paWiLi5O2ZZcuWje7/mc98JmbOnBmf/exn49VXX40XXnghvvjFL8bnPve5OPvss6fuJwEApo28Pwdl6dKlcejQoVi/fn309vbGggULYtu2bVFTUxMREb29vdHT0zO6//ve977o6OiIz3/+81FfXx8zZ86Mm266Ke67776p+ykAgGkl789BKQSfgwIAxec9+xwUAID3gkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5EwqUDZu3Bi1tbVRUVERdXV1sWvXrnd03EsvvRRlZWXxsY99bDIvCwCcIfIOlC1btsTq1atj3bp10dXVFU1NTbF48eLo6en5nccNDg7GsmXL4rrrrpv0sADAmaEky7IsnwOuvvrquPLKK6O9vX10bf78+XHjjTdGW1vbKY+7+eab45JLLonS0tJ4+umno7u7+5T7Dg8Px/Dw8OjjoaGhmDt3bgwODkZlZWU+4wIABTI0NBRVVVWT+vs7rysox44di87Ozmhubh6z3tzcHLt37z7lcd/97nfjZz/7Wdxzzz3v6HXa2tqiqqpqdJs7d24+YwIARS6vQBkYGIiRkZGorq4es15dXR19fX0THvP666/Hl770pXj88cejrKzsHb3O2rVrY3BwcHQ7ePBgPmMCAEXunRXD25SUlIx5nGXZuLWIiJGRkfjMZz4T9957b1x66aXv+PlzuVzkcrnJjAYATAN5BcqsWbOitLR03NWS/v7+cVdVIiIOHz4ce/bsia6urrjjjjsiIuLEiRORZVmUlZXFjh074tprrz2N8QGA6SivWzzl5eVRV1cXHR0dY9Y7OjqisbFx3P6VlZXxyiuvRHd39+jW0tISH/nIR6K7uzuuvvrq05seAJiW8r7F09raGrfcckvU19dHQ0NDbNq0KXp6eqKlpSUiTr5/5M0334zHHnssZsyYEQsWLBhz/IUXXhgVFRXj1gEA3pJ3oCxdujQOHToU69evj97e3liwYEFs27YtampqIiKit7f3934mCgDA75L356AUwun8HjUAUBjv2eegAAC8FwQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJEegAADJESgAQHIECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkp6zQA1AAPT0RAwOFnqL4DQ9H5HKFnmJ6cC6njnM5NWbNipg3r9BTnNEEypmmpydi/vyI3/ym0JMUvxkzIk6cKPQU04NzOXWcy6lxzjkR+/aJlAISKGeagYGTcbJufURNbaGnKV4vvxSx+SHncSo4l1PHuZwabxyI+H9fPvm/lwKlYATKmaqmNuLSywo9RfF64+cn/3QeT59zOXWcS6YRb5IFAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIzqQCZePGjVFbWxsVFRVRV1cXu3btOuW+W7dujU996lPx/ve/PyorK6OhoSG2b98+6YEBgOkv70DZsmVLrF69OtatWxddXV3R1NQUixcvjp6engn3f+GFF+JTn/pUbNu2LTo7O+MTn/hELFmyJLq6uk57eABgeirL94AHHnggVqxYEbfddltERGzYsCG2b98e7e3t0dbWNm7/DRs2jHl8//33xzPPPBM//OEP44orrpjwNYaHh2N4eHj08dDQUL5jAgBFLK8rKMeOHYvOzs5obm4es97c3By7d+9+R89x4sSJOHz4cFxwwQWn3KetrS2qqqpGt7lz5+YzJgBQ5PIKlIGBgRgZGYnq6uox69XV1dHX1/eOnuNrX/taHD16NG666aZT7rN27doYHBwc3Q4ePJjPmABAkcv7Fk9ERElJyZjHWZaNW5vI97///fjKV74SzzzzTFx44YWn3C+Xy0Uul5vMaADANJBXoMyaNStKS0vHXS3p7+8fd1Xl7bZs2RIrVqyIH/zgB/HJT34y/0kBgDNGXrd4ysvLo66uLjo6Osasd3R0RGNj4ymP+/73vx+33nprfO9734sbbrhhcpMCAGeMvG/xtLa2xi233BL19fXR0NAQmzZtip6enmhpaYmIk+8fefPNN+Oxxx6LiJNxsmzZsvjGN74Rf/qnfzp69eXss8+OqqqqKfxRAIDpIu9AWbp0aRw6dCjWr18fvb29sWDBgti2bVvU1NRERERvb++Yz0T59re/HcePH4+VK1fGypUrR9eXL18ejz766On/BADAtDOpN8nefvvtcfvtt0/4z94eHc8///xkXgIAOIP5Lh4AIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIjUACA5AgUACA5AgUASI5AAQCSI1AAgOQIFAAgOQIFAEiOQAEAkiNQAIDkCBQAIDkCBQBIjkABAJIzqUDZuHFj1NbWRkVFRdTV1cWuXbt+5/47d+6Murq6qKioiA9+8IPx0EMPTWpYAODMkHegbNmyJVavXh3r1q2Lrq6uaGpqisWLF0dPT8+E+x84cCCuv/76aGpqiq6urrj77rtj1apV8eSTT5728ADA9FSW7wEPPPBArFixIm677baIiNiwYUNs37492tvbo62tbdz+Dz30UMybNy82bNgQERHz58+PPXv2xD/+4z/Gpz/96QlfY3h4OIaHh0cfDw4ORkTE0NBQvuPydkeOnPzztX0Rv/1tYWcpZm8cOPmn83j6nMup41xOjYM/P/nnkSMR/t45LW/9vZ1lWf4HZ3kYHh7OSktLs61bt45ZX7VqVfbxj398wmOampqyVatWjVnbunVrVlZWlh07dmzCY+65554sImw2m81ms02D7Wc/+1k+uZFlWZbldQVlYGAgRkZGorq6esx6dXV19PX1TXhMX1/fhPsfP348BgYGYvbs2eOOWbt2bbS2to4+/vWvfx01NTXR09MTVVVV+YzM2wwNDcXcuXPj4MGDUVlZWehxipbzOHWcy6njXE4N53HqDA4Oxrx58+KCCy7I+9i8b/FERJSUlIx5nGXZuLXft/9E62/J5XKRy+XGrVdVVfmXZYpUVlY6l1PAeZw6zuXUcS6nhvM4dWbMyP93cvI6YtasWVFaWjruakl/f/+4qyRvueiiiybcv6ysLGbOnJnnuADAmSCvQCkvL4+6urro6OgYs97R0RGNjY0THtPQ0DBu/x07dkR9fX2cddZZeY4LAJwJ8r7m0traGg8//HBs3rw59u3bF2vWrImenp5oaWmJiJPvH1m2bNno/i0tLfHGG29Ea2tr7Nu3LzZv3hyPPPJI3Hnnne/4NXO5XNxzzz0T3vYhP87l1HAep45zOXWcy6nhPE6d0zmXJVmW/+/+bNy4Mb761a9Gb29vLFiwIL7+9a/Hxz/+8YiIuPXWW+PnP/95PP/886P779y5M9asWRN79+6NOXPmxF133TUaNAAAbzepQAEAeDf5Lh4AIDkCBQBIjkABAJIjUACA5CQfKBs3boza2tqoqKiIurq62LVrV6FHKkovvPBCLFmyJObMmRMlJSXx9NNPF3qkotTW1hZ/8id/Euedd15ceOGFceONN8Z//dd/FXqsotPe3h6XX3756Cd1NjQ0xI9+9KNCjzUttLW1RUlJSaxevbrQoxSdr3zlK1FSUjJmu+iiiwo9VlF6880342/+5m9i5syZcc4558THPvax6OzszOs5kg6ULVu2xOrVq2PdunXR1dUVTU1NsXjx4ujp6Sn0aEXn6NGjsXDhwnjwwQcLPUpR27lzZ6xcuTJefvnl6OjoiOPHj0dzc3McPXq00KMVlYsvvjj+/u//Pvbs2RN79uyJa6+9Nv7iL/4i9u7dW+jRitpPf/rT2LRpU1x++eWFHqVo/fEf/3H09vaObq+88kqhRyo6//u//xuLFi2Ks846K370ox/Fq6++Gl/72tfi/PPPz++J8v56wffQVVddlbW0tIxZu+yyy7IvfelLBZpoeoiI7Kmnnir0GNNCf39/FhHZzp07Cz1K0fuDP/iD7OGHHy70GEXr8OHD2SWXXJJ1dHRkf/Znf5Z94QtfKPRIReeee+7JFi5cWOgxit5dd92VXXPNNaf9PMleQTl27Fh0dnZGc3PzmPXm5ubYvXt3gaaCsQYHByMiJvVNnZw0MjISTzzxRBw9ejQaGhoKPU7RWrlyZdxwww3xyU9+stCjFLXXX3895syZE7W1tXHzzTfH/v37Cz1S0Xn22Wejvr4+/uqv/iouvPDCuOKKK+I73/lO3s+TbKAMDAzEyMjIuC8hrK6uHvflg1AIWZZFa2trXHPNNbFgwYJCj1N0XnnllXjf+94XuVwuWlpa4qmnnoo/+qM/KvRYRemJJ56If//3f4+2trZCj1LUrr766njsscdi+/bt8Z3vfCf6+vqisbExDh06VOjRisr+/fujvb09Lrnkkti+fXu0tLTEqlWr4rHHHsvrecrepfmmTElJyZjHWZaNW4NCuOOOO+I///M/48UXXyz0KEXpIx/5SHR3d8evf/3rePLJJ2P58uWxc+dOkZKngwcPxhe+8IXYsWNHVFRUFHqcorZ48eLR//zRj340Ghoa4kMf+lD88z//c7S2thZwsuJy4sSJqK+vj/vvvz8iIq644orYu3dvtLe3j/muvt8n2Ssos2bNitLS0nFXS/r7+8ddVYH32uc///l49tln48c//nFcfPHFhR6nKJWXl8eHP/zhqK+vj7a2tli4cGF84xvfKPRYRaezszP6+/ujrq4uysrKoqysLHbu3Bnf/OY3o6ysLEZGRgo9YtE699xz46Mf/Wi8/vrrhR6lqMyePXvc/9GYP39+3r/gkmyglJeXR11dXXR0dIxZ7+joiMbGxgJNxZkuy7K44447YuvWrfGv//qvUVtbW+iRpo0sy2J4eLjQYxSd6667Ll555ZXo7u4e3err6+Ov//qvo7u7O0pLSws9YtEaHh6Offv2xezZsws9SlFZtGjRuI9feO2116Kmpiav50n6Fk9ra2vccsstUV9fHw0NDbFp06bo6enxTciTcOTIkfjv//7v0ccHDhyI7u7uuOCCC2LevHkFnKy4rFy5Mr73ve/FM888E+edd97oFb6qqqo4++yzCzxd8bj77rtj8eLFMXfu3Dh8+HA88cQT8fzzz8dzzz1X6NGKznnnnTfuPVDnnntuzJw503uj8nTnnXfGkiVLYt68edHf3x/33XdfDA0NxfLlyws9WlFZs2ZNNDY2xv333x833XRT/Nu//Vts2rQpNm3alN8TnfbvAb3LvvWtb2U1NTVZeXl5duWVV/p1zkn68Y9/nEXEuG358uWFHq2oTHQOIyL77ne/W+jRisrnPve50f9ev//978+uu+66bMeOHYUea9rwa8aTs3Tp0mz27NnZWWedlc2ZMyf7y7/8y2zv3r2FHqso/fCHP8wWLFiQ5XK57LLLLss2bdqU93OUZFmWTWE4AQCctmTfgwIAnLkECgCQHIECACRHoAAAyREoAEByBAoAkByBAgAkR6AAAMkRKABAcgQKAJAcgQIAJOf/A+EdSvJK46XfAAAAAElFTkSuQmCC",
+      "text/plain": [
+       "<Figure size 640x480 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "\n",
+    "plt.hist(df_h_dist['경주마 번호'], range(1, 6), density=True, color='pink', edgecolor=\"red\")\n",
+    "plt.xlim(0, 6)\n",
+    "plt.ylim(0, 1)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7bc22a91-463f-4faf-8c62-4230414e03c1",
+   "metadata": {},
+   "source": [
+    "#### 확률질량 함수 (Probability mass function, pmf)\n",
+    "- 확률변수 X의 분포를 나타내는 함수로서, x<sub>i</sub>가 나올 확률이다.\n",
+    "- 확률변수의 값을 매개변수로 전달받고, 해당 값이 나타날 확률을 구해서 리턴하는 함수이다.\n",
+    "- 범주형 확률변수와 이산형 확률변수에서 사용된다.\n",
+    "- 확률변수에서 각 값에 대한 확률을 나타내는 것이 마치 각 값이 \"질량\"을 가지고 있는 것처럼 보이기 때문에 확률질량 함수로 불린다.\n",
+    "\n",
+    "> 확률질량 함수 f는 확률변수 X가 x를 변수값으로 가질 때의 확률이다.  \n",
+    "> <img src=\"./images/pmf01.png\" style=\"margin-top: 10px\">  \n",
+    "> <img src=\"./images/pmf02.png\">  \n",
+    "> <img src=\"./images/pmf03.png\">  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "3c68057b-aef7-4158-8ff1-817bfae34daa",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>경주마 번호</th>\n",
+       "      <th>1등 횟수</th>\n",
+       "      <th>1등할 확률</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>21</td>\n",
+       "      <td>0.21</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>28</td>\n",
+       "      <td>0.28</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>27</td>\n",
+       "      <td>0.27</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>24</td>\n",
+       "      <td>0.24</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   경주마 번호  1등 횟수  1등할 확률\n",
+       "0       1     21    0.21\n",
+       "1       2     28    0.28\n",
+       "2       3     27    0.27\n",
+       "3       4     24    0.24"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "\n",
+    "df_h = pd.DataFrame(np.random.randint(1, 5, size=(100, 1)), columns=[\"경주마 번호\"])\n",
+    "df_h_group = df_h.groupby(\"경주마 번호\")[\"경주마 번호\"].count().reset_index(name=\"1등 횟수\")\n",
+    "\n",
+    "df_h_group[\"1등할 확률\"] = df_h_group[\"1등 횟수\"] / 100\n",
+    "\n",
+    "display(df_h_group)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "id": "bc37ab7f-b101-4f18-8e34-4046f43980a5",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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",
+      "text/plain": [
+       "<Figure size 640x480 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "\n",
+    "plt.hist(df_h['경주마 번호'], range(1, 6), density=True\\\n",
+    "         , color='pink', edgecolor='red', linewidth=2)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3f771b6e-fbc8-43e9-af5e-ec62e7e4b1f4",
+   "metadata": {},
+   "source": [
+    "#### 무한대 (Infinity)\n",
+    "- 끝없이 커지는 상태를 의미하고 기호로 ∞를 사용한다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "47f186fa-f273-4c0b-ad9b-03fddea7a15e",
+   "metadata": {},
+   "source": [
+    "#### 무한소 0 (Infinitiesimal)\n",
+    "- 거의 없다는 의미이고, 0에 매우 근접하지만 0이 아닌 상태를 의미한다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "47a9b420-8bad-4cec-8459-80f188a129ad",
+   "metadata": {},
+   "source": [
+    "#### 미분 (Differential)\n",
+    "- 기울기는 독립변수가 종속변수에 미치는 영향력의 크기를 의미한다.\n",
+    "- 변경 전의 독립변수 x<sub>1</sub>이라는 점과 변경 후의 x<sub>2</sub>라는 점을 지나는 직선의 기울기가 바로 변화에 대한 속도이다.\n",
+    "- 즉, 직선의 기울기가 4로 구해졌다면, 종속변수가 독립변수의 변화에 4배 속도로 변화된 것이다.\n",
+    "- 이 때, 두 점 사이가 무한히 가까워지면, 결국 거의 한 점과 같은 점에 대한 접선의 기울기가 되고 이는 순간적인 변화량이다.\n",
+    "- 미분을 통해서 독립변수가 굉장히 미세하게 변화할 때 순간적으로 종속변수가 얼마나 빠르게 변화하는 지를 알 수 있다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fda310e8-5454-4c55-b637-a23bb2c6efa5",
+   "metadata": {},
+   "source": [
+    "#### 적분 (Integral)\n",
+    "- 선분 = 높이(길이), 면적 = 가로 X 높이\n",
+    "- 면적을 구할 때 여러 사각형으로 나눈 뒤 합하여도 전체 면적이 나온다.\n",
+    "- 가로가 무한소 0인 사각형 즉, 선분과 거의 비슷한 사각형을 쌓은 뒤, 각 면적을 모두 합하는 것이 적분이다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "52de1824-6164-4a7b-bf32-500c92362b2c",
+   "metadata": {},
+   "source": [
+    "#### 확률밀도 함수 (Probability density functioin, pdf)\n",
+    "- 확률변수 X의 분포를 나타내는 함수로서, 특정 구간에 속할 확률이고 이는 특정 구간을 적분한 값이다.\n",
+    "- 확률변수값의 범위(구간)를 매개변수로 전달받고, 범위의 넓이를 구해서 리턴하는 함수이다.\n",
+    "- 연속형 확률변수에서 사용된다.\n",
+    "- 전체에 대한 확률이 아닌 구간에 포함될 확률을 나타내기 때문에 구간에 따른 밀도를 구하는 것이고, 이를 통해 확률밀도 함수라 불린다.\n",
+    "\n",
+    "> 확률밀도 함수 f는 특정 구간에 포함될 확률을 나타낸다.  \n",
+    "> <img src=\"./images/pdf01.png\" style=\"margin-top: 10px;\">  \n",
+    "> <img src=\"./images/pdf02.png\">  \n",
+    "> <img src=\"./images/pdf03.png\">  \n",
+    "> <img src=\"./images/pdf04.png\">  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "db90387f-d0b3-4527-b180-3aeb37a6c72c",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bbfac72b-bf59-461b-a74d-57310a6f472c",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "14285b9a-8569-4612-8351-20fb6d902dbb",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "da7834cc-00e1-4b93-8793-3247d0e7d501",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "27d1d277-fac9-4a4c-8681-c07bcd4530fe",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
