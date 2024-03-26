@@ -189,10 +189,22 @@
 
 #### 표본과 샘플링 (Sample and Sampling)
 - 표본이란, 모집단의 부분집합으로서 표본의 통계량을 통해 모집단의 통계량을 추론할 수 있다.
-- 모집단의 통계량을 구할 수 없는 상확 즉, 전수 조사가 불가능한 상황에서 임의의 표본을 추출하여 분석한다.
+- 모집단의 통계량을 구할 수 없는 상 즉, 전수 조사가 불가능한 상황에서 임의의 표본을 추출하여 분석한다.
 - 이렇게 표본(sample)을 추출하는 작업을 샘플링(Sampling)이라고 한다. 
 
+### 데이터 분석의 범위
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/6548d799-5f70-4571-a1d1-aaef1f062810" width="400px" style="margin-left: 10px">  
 
+#### 기술 통계 (Descriptive Statistics)
+- 수집한 데이터의 요약을 통해서 데이터를 설명(묘사)하는 기법이다.
+- 수집한 데이터의 전체적인 모양을 그리기 위해 기술 통계 기법을 사용한다
+- 집중화 경향(Central tendency): 평균(Mean), 중앙값(Median), 최빈값(Mode)
+- 분산도(Variation): 표준편차(Standard deviation), 사분위(Quartile)
+  
+#### 추론 통계 (Inferential Statistics)
+- 수집한 데이터를 기반으로 특성(패턴)을 알아낸 뒤 특정 데이터를 추론하거나 예측하는 기법이다.
+- 모집단(Population)에서 일정 표본(Sample)을 채취한 뒤, 표본에 대한 통계를 구하여 모집단에 대해 추론한다. 이를 통해 결론에 도달하는 기법이다.
+- 데이터 전체를 조사할 수 없을 때, 랜덤한 표본을 분석해서 나온 결과를 전체적으로 일반화 시킬 때 유용하다.
 
 
 
