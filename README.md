@@ -183,10 +183,65 @@
 
 <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
 
+#### 모집단과 모수 (Population and population parameter)
+- 모집단이란, 정보를 얻고자 하는 대상의 전체 집합을 의미한다.
+- 모수란, 모집단의 수치적 요약값을 의미한다. 평균 또는 표준편차와 같은 모집단의 통계값을 모수라고 한다.
 
+#### 표본과 샘플링 (Sample and Sampling)
+- 표본이란, 모집단의 부분집합으로서 표본의 통계량을 통해 모집단의 통계량을 추론할 수 있다.
+- 모집단의 통계량을 구할 수 없는 상 즉, 전수 조사가 불가능한 상황에서 임의의 표본을 추출하여 분석한다.
+- 이렇게 표본(sample)을 추출하는 작업을 샘플링(Sampling)이라고 한다. 
 
+### 데이터 분석의 범위
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/6548d799-5f70-4571-a1d1-aaef1f062810" width="400px" style="margin-left: 10px">  
 
+#### 기술 통계 (Descriptive Statistics)
+- 수집한 데이터의 요약을 통해서 데이터를 설명(묘사)하는 기법이다.
+- 수집한 데이터의 전체적인 모양을 그리기 위해 기술 통계 기법을 사용한다
+- 집중화 경향(Central tendency): 평균(Mean), 중앙값(Median), 최빈값(Mode)
+- 분산도(Variation): 표준편차(Standard deviation), 사분위(Quartile)
+  
+#### 추론 통계 (Inferential Statistics)
+- 수집한 데이터를 기반으로 특성(패턴)을 알아낸 뒤 특정 데이터를 추론하거나 예측하는 기법이다.
+- 모집단(Population)에서 일정 표본(Sample)을 채취한 뒤, 표본에 대한 통계를 구하여 모집단에 대해 추론한다. 이를 통해 결론에 도달하는 기법이다.
+- 데이터 전체를 조사할 수 없을 때, 랜덤한 표본을 분석해서 나온 결과를 전체적으로 일반화 시킬 때 유용하다.
 
+---  
 
+### Numpy
+- 머신러닝 애플리케이션에서 데이터 추출, 가공, 변환과 같은 데이터 처리 부분을 담당한다.
+- 넘파이 기반의 사이킷런을 이해하기 위해서는 넘파이는 필수이다.
+- 사이킷런은 직관적이고 간결하기 때문에 상대적으로 개발하기 쉽지만 넘파이는 양도 많고 배울 것도 많다.
+- 넘파이 전체를 다 이해하고 공부하는 것은 머신러닝을 포기하게 만들기 때문에 기본 문법과 중요 API만 이해하는 것이 전략적으로 좋다.
 
+#### ndarray
+- N차원(n-dimension) 배열 객체이다.
+- 파이썬 list를 array() 메소드에 전달하면 ndarray로 변환되고 넘파이의 다양하고 편리한 기능들을 사용할 수 있게 된다.
+- 반드시 같은 자료형의 데이터만 담아야 한다.
 
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/999f4154-27d4-4a58-894e-c701527a9b77" width="400px" style="margin-left: 10px">
+
+#### astype()
+- ndarray에 저장된 요소의 타입을 변환시킬 때 사용한다.
+- 대용량 데이터 처리 시, 메모리 절약을 위해 사용한다.  
+
+#### axis
+- 축의 방향성을 표현할 때 axis로 표현할 수 있다.
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/0b8a71f4-b3fe-4d09-b78b-2fee93bc1659" width="500px" style="margin-left: 10px;">  
+
+#### arange(), zeros(), ones()
+- ndarray의 요소를 원하는 범위의 연속값, 0 또는 1로 초기화할 때 사용한다.
+
+#### reshape()
+- ndarray의 기존 shape를 다른 shape로 변경한다.
+
+#### Indexing
+- 특정 위치의 데이터를 가져오는 것
+- 위치 인덱싱(Location indexing)
+- 슬라이싱(Slicing)
+- 팬시 인덱싱(Fancy indexing)
+- 불린 인덱싱(Boolean indexing)
+
+#### Sorting
+- 모두 오름차순 정렬이며, 내림차순은 오름차순 정렬 후 [::-1]을 붙여 사용한다.
