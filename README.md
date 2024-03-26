@@ -228,4 +228,18 @@
 #### axis
 - 축의 방향성을 표현할 때 axis로 표현할 수 있다.
 
-<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/0b8a71f4-b3fe-4d09-b78b-2fee93bc1659" width="500px" style="margin-left: 10px;">
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/0b8a71f4-b3fe-4d09-b78b-2fee93bc1659" width="500px" style="margin-left: 10px;">  
+
+#### arange(), zeros(), ones()
+- ndarray의 요소를 원하는 범위의 연속값, 0 또는 1로 초기화할 때 사용한다.
+
+#### reshape()
+- ndarray의 기존 shape를 다른 shape로 변경한다.
+
+#### Indexing
+- 특정 위치의 데이터를 가져오는 것
+- 위치 인덱싱(Location indexing)
+- 슬라이싱(Slicing)
+- 팬시 인덱싱(Fancy indexing)
+- 불린 인덱싱(Boolean indexing)
+
