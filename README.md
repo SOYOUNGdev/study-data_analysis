@@ -243,3 +243,5 @@
 - 팬시 인덱싱(Fancy indexing)
 - 불린 인덱싱(Boolean indexing)
 
+#### Sorting
+- 모두 오름차순 정렬이며, 내림차순은 오름차순 정렬 후 [::-1]을 붙여 사용한다.
