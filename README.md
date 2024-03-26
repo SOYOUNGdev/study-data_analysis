@@ -220,3 +220,12 @@
 - 반드시 같은 자료형의 데이터만 담아야 한다.
 
 <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/999f4154-27d4-4a58-894e-c701527a9b77" width="400px" style="margin-left: 10px">
+
+#### astype()
+- ndarray에 저장된 요소의 타입을 변환시킬 때 사용한다.
+- 대용량 데이터 처리 시, 메모리 절약을 위해 사용한다.  
+
+#### axis
+- 축의 방향성을 표현할 때 axis로 표현할 수 있다.
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/0b8a71f4-b3fe-4d09-b78b-2fee93bc1659" width="500px" style="margin-left: 10px;">
