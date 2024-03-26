@@ -148,7 +148,21 @@
 > <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/d3c1a61d-703a-4731-b309-e2b1d168cbe3">  
 > <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/84320cd4-af37-4faf-ac0e-733fce275c6d">  
 
+#### 정규분포 (Normal distribution)
+- 모든 독립적인 확률변수들의 평균은 어떠한 분포에 가까워지는데, 이 분포를 정규분포라고 한다.
+- 즉, 비정규분포의 대부분은 극한상태에 있어서 정규분포에 가까워진다.
 
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/67ffb887-09af-4b56-8b42-5d9dd26afbc7" width="500px"> <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/e6f3995b-0e79-4eca-9d17-294c2d8406ed" width="500px">  
+- 평균 μ(mu)와 표준편차 σ(sigma)에 대해 아래의 확률밀도함수를 가지는 분포를 의미한다.
+
+<div style="display: flex">
+    <div>
+        <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/950477b7-f037-4490-b571-93888bc6d9f6" width="230px" style="margin-left: 20px">
+    </div>
+    <div>
+        <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/4a0f3d29-ff7b-4bdb-b34b-09d6877e698a" width="700px" style="margin-left: 20px">
+    </div>
+</div>
 
 
 
