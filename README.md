@@ -164,9 +164,24 @@
     </div>
 </div>
 
+#### 표준 정규분포 (Standard normal distribution)
+- 정규분포는 평균과 표준편차에 따라서 모양이 달라진다.
 
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/d8adebb0-a629-4dc0-bdb3-ebd29f8e6e72" width="400px">
 
+- 정규분포를 따르는 분포는 많지만 각 평균과 표준편차가 달라서 매번 확률을 계산해야 하기 때문에 일반화할 수 없다.
+- N(μ, σ) = N(0, 1)로 만든다면 모두 같은 특성을 가지는 동일한 확률분포로 바꿔서 일반화할 수 있다.
+- 따라서 일반 정규분포를 표준 정규분포로 바꾼 뒤 표준 정규분포의 특정 구간의 넓이를 이용해서 원래 분포의 확률을 구할 수 있다.
 
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/a0eea13c-482f-499d-8a17-502cdcad8212" width="550px">
+
+#### 표준화 (Standardization)
+- 다양한 형태의 정규분포를 표준 정규분포로 변환하는 방법이다.
+- 표준 정규분포에 대한 값(넓이)를 이용해 원래 분포의 확률을 구할 수 있다.
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/378848b0-143c-49c6-bd07-e2f1a2de5930" style="margin-left: 20px">  
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
 
 
 
