@@ -183,6 +183,14 @@
 
 <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
 
+#### 모집단과 모수 (Population and population parameter)
+- 모집단이란, 정보를 얻고자 하는 대상의 전체 집합을 의미한다.
+- 모수란, 모집단의 수치적 요약값을 의미한다. 평균 또는 표준편차와 같은 모집단의 통계값을 모수라고 한다.
+
+#### 표본과 샘플링 (Sample and Sampling)
+- 표본이란, 모집단의 부분집합으로서 표본의 통계량을 통해 모집단의 통계량을 추론할 수 있다.
+- 모집단의 통계량을 구할 수 없는 상확 즉, 전수 조사가 불가능한 상황에서 임의의 표본을 추출하여 분석한다.
+- 이렇게 표본(sample)을 추출하는 작업을 샘플링(Sampling)이라고 한다. 
 
 
 
