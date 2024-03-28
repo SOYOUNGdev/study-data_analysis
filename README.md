@@ -178,10 +178,12 @@
 #### 표준화 (Standardization)
 - 다양한 형태의 정규분포를 표준 정규분포로 변환하는 방법이다.
 - 표준 정규분포에 대한 값(넓이)를 이용해 원래 분포의 확률을 구할 수 있다.
-
-<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/378848b0-143c-49c6-bd07-e2f1a2de5930" style="margin-left: 20px">  
-
-<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
+<div>
+  <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/378848b0-143c-49c6-bd07-e2f1a2de5930" style="margin-left: 20px">  
+</div>
+<div>
+  <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
+</div>
 
 #### 모집단과 모수 (Population and population parameter)
 - 모집단이란, 정보를 얻고자 하는 대상의 전체 집합을 의미한다.
