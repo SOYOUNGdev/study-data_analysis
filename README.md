@@ -324,3 +324,28 @@
 #### 정규화 (Normalization)
 값의 범위를 0~1 사이로 변환시켜 모든 컬럼의 데이터가 평등하게 된다.  
 서로 다른 단위의 값은 비교 대상이 될 수 없다. 예를 들어, 80kg과 180cm는 비교할 수 없기에 정규화를 사용해서 비교한다.
+
+---
+
+### Visualization (시각화)
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/d883bc95-873f-45b0-bd63-fa9cb3413dd1" width="600px" style="margin-left:0">
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/aa20960b-d573-4f67-802e-61b0ebbfca62" width="600px" style="margin-left:0">
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/632174b3-736c-496f-9ae9-8651fc70fcee" width="600px" style="margin-left:0">
+
+##### 범주형(상품 카테고리: 생활용품, 전자제품, 의류, 학생 수준: High, Medium, Low, 측정년도: 2021, 2022, ...)
+- 바이올린 차트
+- 스캐터 플롯
+- 막대 차트
+- 누적 막대 차트  
+  
+##### 수치형(학번: 1, 2,..., 구매 횟수: 157, 789,..., 가격: 1280.15648,..., 식물의 높이: 10,251,...)
+- 막대 차트(숫자가 적을 경우)
+- 선 그래프(숫자가 많을 경우)
+- 바이올린 차트
+- 스캐터 플롯
+- 히스토그램
+- KDE
+
+
+
