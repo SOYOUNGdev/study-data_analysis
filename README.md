@@ -178,10 +178,12 @@
 #### 표준화 (Standardization)
 - 다양한 형태의 정규분포를 표준 정규분포로 변환하는 방법이다.
 - 표준 정규분포에 대한 값(넓이)를 이용해 원래 분포의 확률을 구할 수 있다.
-
-<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/378848b0-143c-49c6-bd07-e2f1a2de5930" style="margin-left: 20px">  
-
-<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
+<div>
+  <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/378848b0-143c-49c6-bd07-e2f1a2de5930" style="margin-left: 20px">  
+</div>
+<div>
+  <img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/1078eb40-3148-4182-a09a-9b3302df9886" style="margin-left: 20px">
+</div>
 
 #### 모집단과 모수 (Population and population parameter)
 - 모집단이란, 정보를 얻고자 하는 대상의 전체 집합을 의미한다.
@@ -274,6 +276,76 @@
 - 데이터 처리 라이브러리 중 가장 인기있는 라이브러리이다.
 - 2차원 데이터(테이블, 엑셀, CSV 등)를 효율적으로 가공 및 처리할 수 있다.
 
+#### 판다스 구성 요소
+- DataFrame: 행과 열로 구성된 2차원 Dataset을 의미한다.
+- Series: 1개의 열로만 구성된 열벡터 Dataset을 의미한다.
+- Index: DataFrame과 Series에서 중복없는 행 번호를 의미한다.
+
+#### DataFrame()
+- dict를 DataFrame으로 변환하고자 할 때 DataFrame 생성자에 전달한다.
+- 컬럼명을 추가하거나 인덱스명을 변경하는 등 다양하게 설정할 수 있다.
+
+### read_csv()
+- csv 파일을 DataFrame으로 읽어온다.
+
+#### head()
+- 전체 데이터 중 앞부분 일부를 가져온다.
+
+#### tail()
+- 전체 데이터 중 뒷부분 일부를 가져온다.
+
+#### iloc[], loc[]
+- 원하는 행 또는 열을 가져온다.
+- iloc은 인덱스 번호로 가져오고, loc은 인덱스 값 또는 컬럼명으로 가져온다.
+
+#### describe()
+- 숫자형 데이터의 개수, 평균, 표준편차, 최소값, 사분위 분포도(중앙값: 50%), 최대값을 제공한다.
+- 25번째 백분위수와 75번째 백분위수를 기준으로 정상치의 범위를 설정할 수 있다.
+
+#### 결속 데이터 처리하기
+- isna를 통해 결속 데이터 여부를 확인할 수 있다.
+- fillna()를 통해 결속 데이터를 다른 값으로 대체할 수 있다.
+
+---
+
+### RFM 분석
+-  사용자별로 얼마나 최근에, 얼마나 자주, 얼마나 많은 금액을 지출했는지에 따라 사용자들의 분포를 확인하거나  
+  사용자 그룹 (또는 등급)을 나누어 분류하는 분석 기법이다. 구매 가능성이 높은 고객을 선정할 때 용이한 데이터 분석 방법이며,  
+  사용자들의 평소 구매 패턴을 기준으로 분류를 진행하기 때문에 각 사용자 그룹의 특성에 따라 차별화된 마케팅 메세지를 전달할 수 있다.
+
+- Recency: 얼마나 최근에 구매했는가
+- Frequency: 얼마나 자주 구매했는가
+- Monetary: 얼마나 많은 금액을 지출했는가
+
+#### 데이터 전처리
+- 데이터의 유형을 변환하거나 데이터 분석에 용이한 형태로 변환하는 작업을 통해  
+  불필요한 컬럼 삭제, 열 병합 등으로 데이터를 정제하는 처리방식이다.
+
+#### 정규화 (Normalization)
+값의 범위를 0~1 사이로 변환시켜 모든 컬럼의 데이터가 평등하게 된다.  
+서로 다른 단위의 값은 비교 대상이 될 수 없다. 예를 들어, 80kg과 180cm는 비교할 수 없기에 정규화를 사용해서 비교한다.
+
+---
+
+### Visualization (시각화)
+
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/d883bc95-873f-45b0-bd63-fa9cb3413dd1" width="600px" style="margin-left:0">
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/aa20960b-d573-4f67-802e-61b0ebbfca62" width="600px" style="margin-left:0">
+<img src="https://github.com/SOYOUNGdev/study-data_analysis/assets/115638411/632174b3-736c-496f-9ae9-8651fc70fcee" width="600px" style="margin-left:0">
+
+##### 범주형(상품 카테고리: 생활용품, 전자제품, 의류, 학생 수준: High, Medium, Low, 측정년도: 2021, 2022, ...)
+- 바이올린 차트
+- 스캐터 플롯
+- 막대 차트
+- 누적 막대 차트  
+  
+##### 수치형(학번: 1, 2,..., 구매 횟수: 157, 789,..., 가격: 1280.15648,..., 식물의 높이: 10,251,...)
+- 막대 차트(숫자가 적을 경우)
+- 선 그래프(숫자가 많을 경우)
+- 바이올린 차트
+- 스캐터 플롯
+- 히스토그램
+- KDE
 
 
 
